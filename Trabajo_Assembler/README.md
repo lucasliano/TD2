@@ -7,9 +7,12 @@ This is a project done all by myself in assembler using the MAX7219. The purpose
 
 You will need to download and import the _project.zip_ file to run this code. The _main.s_ file is essentially the whole project.
 
-### Demo
+<p align="center">
+  <a href="https://github.com/lucasliano/TD2">
+    <img src="https://user-images.githubusercontent.com/49002137/119297536-8a9e9480-bc31-11eb-8a0c-99f61838c29d.gif">
+  </a>
+</p>
 
-![Video](https://user-images.githubusercontent.com/49002137/119297200-e4528f00-bc30-11eb-8e12-e6632b5ff6e0.mp4)
 
 ### Built With
 
@@ -17,10 +20,6 @@ You will need to download and import the _project.zip_ file to run this code. Th
 * [STM32 Cube IDE](https://www.st.com/en/development-tools/stm32cubeide.html)
 * [8x8 Led Matrix based on MAX7219](https://articulo.mercadolibre.com.ar/MLA-743000876-modulo-matriz-de-puntos-8x8-max7219-todomicro-garantia-_JM)
 
-
-
-
----
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -43,7 +42,7 @@ You will need to install the [STM32 Cube IDE](https://www.st.com/en/development-
 
 ---
 
-# Planificación:
+# Planification:
 
 * [x] Ver cómo funciona SPI
 * [x] Ver cómo funciona el MAX7219
