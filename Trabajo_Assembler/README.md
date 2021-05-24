@@ -7,13 +7,16 @@ This is a project done all by myself in assembler using the MAX7219. The purpose
 
 You will need to download and import the _project.zip_ file to run this code. The _main.s_ file is essentially the whole project.
 
+### Demo
+
+![Video](https://user-images.githubusercontent.com/49002137/119297200-e4528f00-bc30-11eb-8e12-e6632b5ff6e0.mp4)
+
 ### Built With
 
 * [STM32 Blue Pill](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill.html)
 * [STM32 Cube IDE](https://www.st.com/en/development-tools/stm32cubeide.html)
 * [8x8 Led Matrix based on MAX7219](https://articulo.mercadolibre.com.ar/MLA-743000876-modulo-matriz-de-puntos-8x8-max7219-todomicro-garantia-_JM)
 
-### Demo
 
 
 
