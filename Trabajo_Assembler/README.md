@@ -3,7 +3,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This is a project done all by myself in assembler using the MAX7219. The purpose of this project is to learn how to code in assembler. I will be using a STM32F103C8 $\mu$C to do this.
+This is a project done all by myself in assembly language using the MAX7219. The purpose of this project is to learn how to code in assembler. I will be using a STM32F103C8 $\mu$C to do this.
 
 You will need to download and import the _project.zip_ file to run this code. The _main.s_ file is essentially the whole project.
 
