@@ -3,9 +3,16 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This is a project done all by myself in assembler using the MAX7219. The purpose of this project is to learn how to code in assembler. I will be using a STM32F103C8 $\mu$C to do this.
+This is a project done all by myself in assembly language using the MAX7219. The purpose of this project is to learn how to code in assembler. I will be using a STM32F103C8 $\mu$C to do this.
 
 You will need to download and import the _project.zip_ file to run this code. The _main.s_ file is essentially the whole project.
+
+<p align="center">
+  <a href="https://github.com/lucasliano/TD2">
+    <img src="https://user-images.githubusercontent.com/49002137/119297536-8a9e9480-bc31-11eb-8a0c-99f61838c29d.gif">
+  </a>
+</p>
+
 
 ### Built With
 
@@ -13,11 +20,6 @@ You will need to download and import the _project.zip_ file to run this code. Th
 * [STM32 Cube IDE](https://www.st.com/en/development-tools/stm32cubeide.html)
 * [8x8 Led Matrix based on MAX7219](https://articulo.mercadolibre.com.ar/MLA-743000876-modulo-matriz-de-puntos-8x8-max7219-todomicro-garantia-_JM)
 
-### Demo
-
-
-
----
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -40,7 +42,7 @@ You will need to install the [STM32 Cube IDE](https://www.st.com/en/development-
 
 ---
 
-# Planificación:
+# Planification:
 
 * [x] Ver cómo funciona SPI
 * [x] Ver cómo funciona el MAX7219
