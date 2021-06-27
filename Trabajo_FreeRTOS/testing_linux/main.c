@@ -5,8 +5,8 @@
 
 #include <unistd.h>
 
-#define INITIAL_STATE 42374813
-
+#define INITIAL_STATE 42374813  // Es mi DNI
+#define TIME_SLEEP 250000
 
 // **************************** MAIN *****************************
 void main(void){
@@ -17,15 +17,11 @@ void main(void){
     printf("First State:\n");
     printBoard(&actualBoard);
 
-    // updateBoard(&actualBoard, &futureBoard);
-    // printf("Second State:\n");
-    // actualBoard = futureBoard;
-    // printBoard(&actualBoard);
-
     char exit = 1;
+    uint32_t iteration = 1;
     while(exit){
         updateBoard(&actualBoard, &futureBoard);
-        printf("\n");
+        printf("i:%d\n",++iteration);
         actualBoard = futureBoard;
         printBoard(&actualBoard);
 
@@ -36,10 +32,8 @@ void main(void){
               i = 8;
           }
         }
-        usleep(500000);
+        usleep(TIME_SLEEP);
     }
-
-
 }
 
 
@@ -60,7 +54,7 @@ void updateBoard(board_t* actualBoard, board_t* futureBoard){
          // Acá estamos loopeando por cada pixel.
          futureBoard->value[i][j] = isAlive(actualBoard, i, j);
       }
-      futureBoard->num[i] = bin2dec(actualBoard->value[i]); //After updating the bit fields, we also update the uint8_t value.
+      futureBoard->num[i] = bin2dec(futureBoard->value[i]); //After updating the bit fields, we also update the uint8_t value.
     }
 }
 
@@ -72,20 +66,20 @@ _Bool isAlive(board_t* board, uint8_t y, uint8_t x){
 
 
     for (char i = -1 ; i <= 1; i++){
-        // printf("y: %d, i: %d, (y+i): %d\n", y, i, y + i);
         neiY = checkBorder(y + i);
-        // printf("neiY: %d\n", neiY);
         for (char j = -1 ; j <= 1; j++){
             neiX = checkBorder(x + j);
             if (i != 0 || j != 0){    // I check all the neighbors excepting the actual pixel
-                // printf("y: %d, x: %d, neiY: %d, neiX: %d\n", y, x, neiY, neiX);
                 neighbors_count += board->value[neiY][neiX];
             }
         }
     }
 
-    if (neighbors_count >= 2 && neighbors_count <= 3){
-        // Comfortable state
+    if (neighbors_count == 3){
+        // Se reproduce o se mantiene
+        outputState = 1;
+    }else if (neighbors_count == 2 && board->value[y][x] == 1){
+        // Si está viva, sigue viva
         outputState = 1;
     }
 
@@ -134,14 +128,12 @@ uint8_t bin2dec(_Bool* input){
 
 void printBoard(board_t* board){
   for(char i = 0; i < 8; i++){
-    //printf("board[%d]: %d -> ", i, board->num[i]);
     for(char j = 8-1; j >= 0; j--){
         if (board->value[i][j]){
             printf("█");
         }else{
             printf("░");
         }
-        //printf("%d", board->value[i][j]);
     }
     printf("\n");
   }
