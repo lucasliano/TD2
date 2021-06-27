@@ -12,7 +12,7 @@ typedef struct board_t
 void setupBoard(board_t*);
 void updateBoard(board_t* , board_t* );
 _Bool isAlive(board_t* , uint8_t , uint8_t );
-uint8_t checkBorder(uint8_t );
+uint8_t checkBorder(char );
 
 
 // --------------- Small Function ---------------
