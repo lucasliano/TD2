@@ -1,0 +1,4 @@
+max7219.c:14:13:comando	24	static
+max7219.c:23:6:llenar_max7219	24	static
+max7219.c:30:6:dibujar_max7219	24	static
+max7219.c:37:6:inicializar_max7219	24	static

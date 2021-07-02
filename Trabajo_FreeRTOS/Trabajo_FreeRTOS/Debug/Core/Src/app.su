@@ -1,0 +1,11 @@
+app.c:13:6:checkStatusTask	24	static
+app.c:38:6:updateBoardTask	96	static
+app.c:71:6:checkStatus	24	static
+app.c:85:6:generateBoard	24	static
+app.c:95:6:updateBoard	32	static
+app.c:105:7:isAlive	24	static
+app.c:134:9:checkBorder	24	static
+app.c:146:10:xor32	4	static
+app.c:154:6:clearBoard	24	static
+app.c:161:6:generateLine	24	static
+app.c:172:9:bin2dec	32	static

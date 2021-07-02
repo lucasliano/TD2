@@ -1,44 +1,31 @@
-// Incluimos librerias
-#include <stdio.h>
-#include <math.h>
-#include "mylib.h"
+/*
+ * app.c
+ *
+ *  Created on: Jun 28, 2021
+ *      Author: lucas
+ */
 
-#include <unistd.h>
+#include "main.h"
 
 #define INITIAL_STATE 42374813  // Es mi DNI
-#define TIME_SLEEP 250000
-
-// **************************** MAIN *****************************
-void main(void){
-    board_t actualBoard;
-    board_t futureBoard;
-
-    setupBoard(&actualBoard);
-    printf("First State:\n");
-    printBoard(&actualBoard);
-
-    char exit = 1;
-    uint32_t iteration = 1;
-    while(exit){
-        updateBoard(&actualBoard, &futureBoard);
-        printf("i:%d\n",++iteration);
-        actualBoard = futureBoard;
-        printBoard(&actualBoard);
-
-        exit = 0;
-        for (uint8_t i = 0 ; i < 8; i++){
-          if(actualBoard.num[i] != 0){
-              exit = 1;
-              i = 8;
-          }
-        }
-        usleep(TIME_SLEEP);
-    }
-}
 
 
 // ======================= Important functions =======================
-void setupBoard(board_t* board){
+void checkStatus(board_t* board){
+	uint8_t isAlive = 0;
+	for (uint8_t i = 0; i < 8; i++){
+		if (board->num[i] != 0){
+			isAlive = 1;
+		}
+	}
+
+	if(!isAlive){
+		generateBoard(board);
+	}
+}
+
+
+void generateBoard(board_t* board){
     uint8_t boardLine = 0;
     for (uint8_t i = 0 ; i < 8; i++){
       boardLine = (uint8_t) xor32();
@@ -63,11 +50,12 @@ _Bool isAlive(board_t* board, uint8_t y, uint8_t x){
     uint8_t neighbors_count = 0;
     uint8_t neiY;
     uint8_t neiX;
+    int8_t i;
+    int8_t j;
 
-
-    for (char i = -1 ; i <= 1; i++){
+    for (i = -1 ; i <= 1; i++){
         neiY = checkBorder(y + i);
-        for (char j = -1 ; j <= 1; j++){
+        for (j = -1 ; j <= 1; j++){
             neiX = checkBorder(x + j);
             if (i != 0 || j != 0){    // I check all the neighbors excepting the actual pixel
                 neighbors_count += board->value[neiY][neiX];
@@ -86,7 +74,7 @@ _Bool isAlive(board_t* board, uint8_t y, uint8_t x){
     return outputState;
 }
 
-uint8_t checkBorder(char index){
+uint8_t checkBorder(int8_t index){
     uint8_t output = index;
 
     if (index < 0){
@@ -99,17 +87,23 @@ uint8_t checkBorder(char index){
 
 // ======================= Small - functions =======================
 uint32_t xor32(void){
-		static uint32_t y = INITIAL_STATE;
-    y^= y<<13;
-		y^= y>>17;
-		y^= y<<5;
-		return y;
+	static uint32_t y = INITIAL_STATE;
+	y^= y<<13;
+	y^= y>>17;
+	y^= y<<5;
+	return y;
 }
 
+void clearBoard(board_t* board){
+	for (uint8_t i = 0 ; i < 8; i++){
+	      board->num[i] = 0;
+	      generateLine(0, board->value[i]);
+	    }
+}
 
-
-void generateLine(uint8_t input, _Bool* output){
-    for(char i = 8-1; i >= 0; i--){
+void generateLine(uint8_t input, uint8_t* output){
+	int8_t i;
+    for(i = 8-1; i >= 0; i--){
       if((input & (1 << i))){
         output[i] = 1;
       }else{
@@ -118,9 +112,9 @@ void generateLine(uint8_t input, _Bool* output){
     }
 }
 
-uint8_t bin2dec(_Bool* input){
+uint8_t bin2dec(uint8_t* input){
     uint8_t output = 0;
-    for(char i = 8-1; i >= 0; i--){
+    for(int8_t i = 8-1; i >= 0; i--){
       if(input[i]){
         output += pow(2, i);
       }
@@ -128,15 +122,3 @@ uint8_t bin2dec(_Bool* input){
     return output;
 }
 
-void printBoard(board_t* board){
-  for(char i = 0; i < 8; i++){
-    for(char j = 8-1; j >= 0; j--){
-        if (board->value[i][j]){
-            printf("█");
-        }else{
-            printf("░");
-        }
-    }
-    printf("\n");
-  }
-}
