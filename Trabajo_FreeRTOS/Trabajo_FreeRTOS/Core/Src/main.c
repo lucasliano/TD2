@@ -60,6 +60,8 @@ void StartDefaultTask(void const * argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+board_t mainBoard;
+datos_t data;
 
 /* USER CODE END 0 */
 
@@ -70,6 +72,13 @@ void StartDefaultTask(void const * argument);
 int main(void)
 {
 	/* USER CODE BEGIN 1 */
+	// Board principal.
+
+	data.board = &mainBoard;
+
+	clearBoard(data.board);
+
+
 
 	/* USER CODE END 1 */
 
@@ -95,7 +104,7 @@ int main(void)
 	/* USER CODE BEGIN 2 */
 
 
-	for(uint8_t i=0;i<1000000;i++);
+	HAL_Delay(500);
 	inicializar_max7219(&hspi1, GPIOA, GPIO_PIN_4);
 
 
@@ -106,24 +115,6 @@ int main(void)
 	/* USER CODE END RTOS_MUTEX */
 
 	/* USER CODE BEGIN RTOS_SEMAPHORES */
-	/* add semaphores, ... */
-	/* USER CODE END RTOS_SEMAPHORES */
-
-	/* USER CODE BEGIN RTOS_TIMERS */
-	/* start timers, add new ones, ... */
-	/* USER CODE END RTOS_TIMERS */
-
-	/* USER CODE BEGIN RTOS_QUEUES */
-	/* add queues, ... */
-	/* USER CODE END RTOS_QUEUES */
-
-	/* Create the thread(s) */
-	/* definition and creation of defaultTask */
-	osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
-	defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
-
-	/* USER CODE BEGIN RTOS_THREADS */
-
 	// Semáforo para mutua exclusión.
 	xSemaphoreHandle sem_mutex;
 
@@ -134,42 +125,57 @@ int main(void)
 			// Should not reach this point.
 		}
 	}
-
-	// Board principal.
-	board_t mainBoard;
-
-
-	datos_t data;
-	data.board = &mainBoard;
 	data.mutex = sem_mutex;
+	/* USER CODE END RTOS_SEMAPHORES */
 
+	/* USER CODE BEGIN RTOS_TIMERS */
+	/* start timers, add new ones, ... */
+	/* USER CODE END RTOS_TIMERS */
 
+	/* USER CODE BEGIN RTOS_QUEUES */
+	/* add queues, ... */
+
+	/* USER CODE END RTOS_QUEUES */
+
+	/* Create the thread(s) */
+	/* definition and creation of defaultTask */
 
 	// Creamos las tareas
-	if( xTaskCreate(checkStatusTask,
-					"CheckStatus Task",
-					128,
-					&data,
-					1,
-					NULL) != pdPASS)
-	{
-		while(1){
-					// Should not reach this point.
-				}
-	}
 
+
+	osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+	defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
 	if( xTaskCreate(updateBoardTask,
 					"UpdateBoard Task",
-					128,
+					2*configMINIMAL_STACK_SIZE,
 					&data,
-					1,
+					tskIDLE_PRIORITY+1,
 					NULL) != pdPASS)
+
+
+	/* USER CODE BEGIN RTOS_THREADS */
+
 	{
 		while(1){
 					// Should not reach this point.
 				}
 	}
+
+	if( xTaskCreate(checkStatusTask,
+						"CheckStatus Task",
+						2*configMINIMAL_STACK_SIZE,
+						&data,
+						tskIDLE_PRIORITY+2,
+						NULL) != pdPASS)
+	{
+		while(1){
+					// Should not reach this point.
+				}
+	}
+
+
+
 
 	/* USER CODE END RTOS_THREADS */
 
@@ -248,11 +254,11 @@ static void MX_SPI1_Init(void)
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_16BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -267,6 +273,7 @@ static void MX_SPI1_Init(void)
 
 }
 
+
 /**
   * @brief GPIO Initialization Function
   * @param None
@@ -274,13 +281,34 @@ static void MX_SPI1_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
-}
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+}
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */

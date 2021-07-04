@@ -15,20 +15,18 @@ void checkStatusTask(void *params){
 	datos_t *data = (datos_t*)params;
 
 
-	// Variable declaration
-	board_t* actualBoard = data->board;
 
 	while(1){	// Infinite Loop
 		// Solicito el uso del mainBoard
 		xSemaphoreTake(data->mutex,portMAX_DELAY);
 		//Zona de mutua exclusión.
 
-		checkStatus(actualBoard);
+		checkStatus(data->board);
 
 		// Devuelvo la posibilidad de trabajar con mainBoard
 		xSemaphoreGive(data->mutex);
 
-		vTaskDelay(10 / portTICK_RATE_MS);			// 500ms Delay
+		vTaskDelay(500 / portTICK_RATE_MS);			// 500ms Delay
 	}
 	/* We should never get here */
 	vTaskDelete( NULL );
@@ -41,12 +39,8 @@ void updateBoardTask(void *params){
 
 
 	// Variable declaration
-	board_t* actualBoard = data->board;
-	board_t futureBoard;
+	static board_t futureBoard;
 
-	xSemaphoreTake(data->mutex,portMAX_DELAY);
-	clearBoard(actualBoard);
-	xSemaphoreGive(data->mutex);
 
 
 	while(1){	// Infinite Loop
@@ -54,11 +48,12 @@ void updateBoardTask(void *params){
 		xSemaphoreTake(data->mutex,portMAX_DELAY);
 		//Zona de mutua exclusión.
 
-		tarea_matriz(actualBoard);
-		updateBoard(actualBoard, &futureBoard);
-		*(actualBoard) = futureBoard;
+		tarea_matriz(data->board);
+		updateBoard(data->board, &futureBoard);
+		*(data->board) = futureBoard;
 
-		// Devuelvo la posibilidad de trabajar con mainBoard
+
+		//Devuelvo la posibilidad de trabajar con mainBoard
 		xSemaphoreGive(data->mutex);
 
 
@@ -105,8 +100,8 @@ void updateBoard(board_t* actualBoard, board_t* futureBoard){
     }
 }
 
-_Bool isAlive(board_t* board, uint8_t y, uint8_t x){
-    _Bool outputState = 0;
+uint8_t isAlive(board_t* board, uint8_t y, uint8_t x){
+	uint8_t outputState = 0;
     uint8_t neighbors_count = 0;
     uint8_t neiY;
     uint8_t neiX;

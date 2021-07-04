@@ -19,7 +19,7 @@ typedef struct board_t
 typedef struct datos_t
 {
 	board_t* board;
-	xSemaphoreHandle mutex;
+	xSemaphoreHandle* mutex;
 } datos_t;
 
 
@@ -31,7 +31,7 @@ void updateBoardTask(void *params);
 void checkStatus(board_t*);
 void generateBoard(board_t*);
 void updateBoard(board_t* , board_t* );
-_Bool isAlive(board_t* , uint8_t , uint8_t );
+uint8_t isAlive(board_t* , uint8_t , uint8_t );
 uint8_t checkBorder(int8_t );
 
 
