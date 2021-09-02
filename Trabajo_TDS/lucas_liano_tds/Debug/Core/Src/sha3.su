@@ -1,0 +1,9 @@
+sha3.c:76:1:keccakf	200	static
+sha3.c:120:1:sha3_Init	24	static
+sha3.c:130:1:sha3_Init256	16	static
+sha3.c:136:1:sha3_Init384	16	static
+sha3.c:142:1:sha3_Init512	16	static
+sha3.c:148:1:sha3_SetFlags	24	static
+sha3.c:158:1:sha3_Update	192	static
+sha3.c:252:1:sha3_Finalize	80	static
+sha3.c:306:15:sha3_HashBuffer	256	static

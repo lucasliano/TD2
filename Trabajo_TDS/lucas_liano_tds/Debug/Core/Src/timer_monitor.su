@@ -1,0 +1,6 @@
+timer_monitor.c:3:6:inic_timer	16	static
+timer_monitor.c:19:6:init_timer_sandwich	4	static
+timer_monitor.c:29:6:start_timer	4	static
+timer_monitor.c:35:10:stop_timer	16	static
+timer_monitor.c:42:6:start_sandwich	4	static
+timer_monitor.c:47:9:stop_sandwich	24	static
